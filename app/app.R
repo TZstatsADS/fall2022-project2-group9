@@ -229,7 +229,8 @@ server <- function(input, output, session){
     }}) 
   
   output$table <- renderDataTable(DT::datatable({
-    data <- res[-2][-7]
+    data <- res[-2][-7] %>%
+      select("Service.Start.Date",  "Service.End.Date", "Borough", "DailyCharge", "DailyConsumption")
     data}))
 }
 
