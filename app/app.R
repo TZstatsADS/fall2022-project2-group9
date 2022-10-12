@@ -195,9 +195,9 @@ server <- function(input, output, session){
     if(input$select == 1)# for Electric Data
     {
       bins <- c(0, 1000,20000,30000,4000,50000, Inf)
-      pal <- colorBin("Blues", domain = Electric_Data$Electric.Consumption.Average..KWH., bins = bins)
+      pal <- colorBin("Reds", domain = Electric_Data$Electric.Consumption.Average..KWH., bins = bins)
       
-      labels1 <- paste( Electric_Data$Zip.Code, " - ",nycboroughs$borough,  "<br/>","Consumption in KWH: ",Electric_Data$Electric.Consumption.Average..KWH.,"<br/>",
+      labels1 <- paste( nycboroughs$postalCode, " - ",nycboroughs$borough,  "<br/>","Consumption in KWH: ",Electric_Data$Electric.Consumption.Average..KWH.,"<br/>",
                         "Charges in $: ",Electric_Data$Electric.Average.Charge,"<br/>")%>% lapply(htmltools::HTML)
       leaflet(nycboroughs) %>%
         addTiles() %>%
@@ -209,9 +209,9 @@ server <- function(input, output, session){
     else if(input$select == 2)#For Water Data
     {
       bins <- c(0, 200,400,600,800,1000, Inf)
-      pal <- colorBin("Blues", domain = water_data$Water.Consumption.Average..HCF., bins = bins)
+      pal <- colorBin("Reds", domain = water_data$Water.Consumption.Average..HCF., bins = bins)
       
-      labels1 <- paste( water_data$Zip.Code, " - ", nycboroughs$borough, "<br/>","Consumption in HCF: ",water_data$Water.Consumption.Average..HCF.,"<br/>",
+      labels1 <- paste( nycboroughs$postalCode, " - ", nycboroughs$borough, "<br/>","Consumption in HCF: ",water_data$Water.Consumption.Average..HCF.,"<br/>",
                         "Charges in $: ",Electric_Data$Electric.Average.Charge,"<br/>")%>% lapply(htmltools::HTML)
       
       leaflet(nycboroughs) %>%
@@ -225,9 +225,9 @@ server <- function(input, output, session){
     else if(input$select == 3)#For Heat Data
     {
       bins <- c(0, 1000,20000,30000,4000,50000, Inf)
-      pal <- colorBin("Blues", domain = heat_data$Heat.Consumption.Average , bins = bins)
+      pal <- colorBin("Reds", domain = heat_data$Heat.Consumption.Average , bins = bins)
       
-      labels1 <- paste( heat_data$Zip.Code, " - ",nycboroughs$borough, "<br/>","Consumption in Therms: ",heat_data$Heat.Consumption.Average..Therms,"<br/>",
+      labels1 <- paste( nycboroughs$postalCode, " - ",nycboroughs$borough, "<br/>","Consumption in Therms: ",heat_data$Heat.Consumption.Average..Therms,"<br/>",
                         "Charges in $: ",heat_data$Heat.Average.Charge,"<br/>")%>% lapply(htmltools::HTML)
       
       leaflet(nycboroughs) %>%
