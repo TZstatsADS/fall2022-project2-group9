@@ -48,9 +48,10 @@ ui<- dashboardPage(
     
     tabItems(
       tabItem(tabName = "about", 
-              p("Introduction"), 
-              p("Our app aims to show the utility change during the time of pandemic. "), 
-              p("The data we use is from NYCHA (New York City Housing Authority). The Consumption and cost data of Electric, Water and Cooking Gas are being plotted in this dashboard. Our data range from January 2010 to January 2022."),
+              p("Introduction", style = "font-size:100px"),
+              p("We created an R Shiny app to help the NYCHA visualize the utility consumption across its residencies. The app consistents of a heatmap, pie charts, a line chart and a data table to allow the user to track utility usage over time.", style = "font-size:36px"), 
+              p("The data we use is from NYCHA (New York City Housing Authority). The Consumption and cost data of Electric, Water, Heat and Cooking Gas are being plotted in this dashboard. Our data range from January 2010 to January 2022.", style = "font-size:36px"),
+              
       ),
       
       tabItem(tabName = "table", 
@@ -129,33 +130,19 @@ server <- function(input, output, session){
   
   output$graph1 = renderPlotly({
     
-  if (input$Value == 'Cost'){
-    return(
-      res %>%
-        filter(Borough == input$Borough,
-               Revenue.Month2 >= as.Date(input$dateRange[1]), 
-               Revenue.Month2 <= as.Date(input$dateRange[2])
-        ) %>%
-        group_by(type) %>%
-        summarise(DailyCost = sum(DailyCharge))  %>%
-        plot_ly(labels = ~type, values = ~DailyCost, type = "pie")%>%
-        layout(title = 'Borough Difference' 
-               ,legend = list(orientation = "h" , font = list(size = 7)))
-    )
-  } else {
-    return(
-      res %>%
-        filter(Borough == input$Borough,
-               Revenue.Month2 >= as.Date(input$dateRange[1]), 
-               Revenue.Month2 <= as.Date(input$dateRange[2])
-        ) %>%
-        group_by(type) %>%
-        summarise(DailyConsumption = sum(DailyConsumption))  %>%
-        plot_ly(labels = ~type, values = ~DailyConsumption, type = "pie")%>%
-        layout(title = 'Borough Difference' 
-               ,legend = list(orientation = "h" , font = list(size = 7)))
-    )
-  }
+  return(
+    res %>%
+      filter(Borough == input$Borough,
+             Revenue.Month2 >= as.Date(input$dateRange[1]), 
+             Revenue.Month2 <= as.Date(input$dateRange[2])
+      ) %>%
+      group_by(type) %>%
+      summarise(DailyCost = sum(DailyCharge))  %>%
+      plot_ly(labels = ~type, values = ~DailyCost, type = "pie")%>%
+      layout(title = 'Borough Difference' 
+             ,legend = list(orientation = "h" , font = list(size = 7)))
+  )
+
   })
   
   output$graph2 = renderPlotly({
@@ -201,7 +188,7 @@ server <- function(input, output, session){
                         "Charges in $: ",Electric_Data$Electric.Average.Charge,"<br/>")%>% lapply(htmltools::HTML)
       leaflet(nycboroughs) %>%
         addTiles() %>%
-        addPolygons(stroke = FALSE, smoothFactor = 0.3, fillOpacity = 1,
+        addPolygons(stroke = FALSE, smoothFactor = 0.3, fillOpacity = 0.25,
                     fillColor = ~pal(Electric_Data$Electric.Consumption.Average..KWH.),label=labels1) %>%
         addLegend(pal = pal, values = Electric_Data$Electric.Consumption.Average..KWH., opacity = 1.0,position = "bottomright",
         )
@@ -216,7 +203,7 @@ server <- function(input, output, session){
       
       leaflet(nycboroughs) %>%
         addTiles() %>%
-        addPolygons(stroke = FALSE, smoothFactor = 0.3, fillOpacity = 1,
+        addPolygons(stroke = FALSE, smoothFactor = 0.3, fillOpacity = 0.25,
                     fillColor = ~pal(water_data$Water.Consumption.Average..HCF.),label=labels1
         ) %>%
         addLegend(pal = pal, values = water_data$Water.Consumption.Average..HCF., opacity = 1.0,position = "bottomright")
@@ -232,7 +219,7 @@ server <- function(input, output, session){
       
       leaflet(nycboroughs) %>%
         addTiles() %>%
-        addPolygons(stroke = FALSE, smoothFactor = 0.3, fillOpacity = 1,
+        addPolygons(stroke = FALSE, smoothFactor = 0.3, fillOpacity = 0.25,
                     fillColor = ~pal(heat_data$Heat.Consumption.Average),label=labels1
                     
         ) %>%
